@@ -1,10 +1,10 @@
-package com.coni.backend.coniapp.demo;
+package com.coni.backend.asistant.asistantconi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class AsistantconiApplicationTests {
 
 	@Test
 	void contextLoads() {

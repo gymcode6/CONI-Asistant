@@ -1,13 +1,13 @@
-package com.coni.backend.coniapp.demo;
+package com.coni.backend.asistant.asistantconi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class AsistantconiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(AsistantconiApplication.class, args);
 	}
 
 }
