@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div className='main'>
-    <h2>Click the button to transcribe</h2>
+    <h2>Click the button to record</h2>
 
       <AudioRecorder />
 

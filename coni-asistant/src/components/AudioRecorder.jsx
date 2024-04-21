@@ -1,11 +1,13 @@
 import micro from '../assets/micro.png'
 import '../styles.css'
 import { useState } from 'react'
+import output from '../static/output.mp3'
 export function AudioRecorder() {
     const [recording, setRecording] = useState(false);
     const [audioBlob, setAudioBlob] = useState(null);
     const [mediaRecorder, setMediaRecorder] = useState(null);
-    const [transcription, setTranscription] = useState('');
+    const [txResponse, setTxResponse] = useState('');
+    const [flResponse, setFlResponse] = useState(null);
     /*const [handle, setHandle] = useState(false);*/
 
     const startRecording = async () => {
@@ -59,9 +61,12 @@ export function AudioRecorder() {
                     body: formData,
                 });
                 if (response.ok) {
-                    const transcribed = await response.json();
-                    setTranscription(transcribed.text);
-                    console.log(transcribed.text);
+                    const Response = await response.json();
+                    setTxResponse(Response.text);
+                    setFlResponse(output);
+                    playAudio(flResponse);
+
+                    console.log(Response.text);
 
                     console.log('Upload successful');
                 }
@@ -72,7 +77,13 @@ export function AudioRecorder() {
                 console.error('error uploading audio:', error)
             }
         }
-    }
+    };
+    const playAudio = (audioUrl) => {
+        const audio = new Audio(audioUrl);
+        audio.play().catch((error) => {
+            console.error('Error playing audio:', error);
+        });
+    };
 
 
     return (
@@ -84,10 +95,10 @@ export function AudioRecorder() {
             <img className='micro' src={micro} alt="micro"></img>
             </button>}
 
-            {transcription && (
+            {txResponse && (
                 <div>
-                    <h3>Transcripción:</h3>
-                    <span>{transcription}</span>
+                    <h3>Respuesta:</h3>
+                    <span>{txResponse}</span>
                 </div>
             )}
       
