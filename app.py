@@ -1,4 +1,6 @@
 from Audio_Transcriber import Transcriber
+from Voice_synthesizer import Synthesizer
+from Language_model import LLM
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -14,17 +16,25 @@ client = OpenAI()
 app = Flask(__name__)
 CORS(app) 
  
+synthesizer = Synthesizer()
 @app.route('/', methods=['POST'])
-def transcribe():
+def asistente():
     if 'audio' not in request.files:
         return 'No se recibió ningún archivo de audio', 400
-
     
     audio_file = request.files.get('audio')
-
     transcribed_text = Transcriber.transcribe_audio(client, audio_file)
 
-    return jsonify({'text': transcribed_text})
+    responseTx = LLM.completion(client, transcribed_text)
+    responseFl = synthesizer.synthesize(responseTx)
+    
+    responseJson = {
+        'result': 'ok',
+        'text': responseTx,
+        'file': responseFl
+    }
+
+    return jsonify(responseJson)
 
 if __name__ == '__main__':
     app.run(debug=True)

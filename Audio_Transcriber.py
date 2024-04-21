@@ -8,7 +8,8 @@ class Transcriber:
     audio_file = open("audio.mp3", 'rb')
     transcribed = client.audio.transcriptions.create(
       model="whisper-1",
-      file=audio_file
+      file=audio_file,
+      language="es"
     )
     return transcribed.text
 
