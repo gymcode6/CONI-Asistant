@@ -1,50 +1,39 @@
-import os
-from dotenv import load_dotenv
-import requests
-    
+from typing import IO
+
+from io import BytesIO
+from elevenlabs import VoiceSettings
 class Synthesizer :
     def __init__(self):
-        load_dotenv()
-        self.key = os.getenv('ELEVENLABS_API_KEY')
+        pass
     
-    def synthesize(self, text) :
-            CHUNK_SIZE = 1024
-            url = "https://api.elevenlabs.io/v1/text-to-speech/9YuUJveN0kf40N1jOoJW"
+    def synthesize(client, text: str) -> IO[bytes]:
+            response = client.text_to_speech.convert(
+                voice_id="Xb7hH8MSUJpSbSDYk0k2",
+                optimize_streaming_latency="0",
+                output_format="mp3_22050_32",
+                text=text,
+                model_id="eleven_multilingual_v2",
+                voice_settings=VoiceSettings(
+                    stability=0.5,
+                    similarity_boost=0.6,
+                    style=0.0,
+                    use_speaker_boost=True,
+                ),
+            )
 
-            headers = {
-            "Accept": "audio/mpeg",
-            "Content-Type": "application/json",
-            "xi-api-key": self.key
-            }
+            audio_stream = BytesIO()
 
-            data = {
-            "text": text,
-            "model_id": "eleven_multilingual_v1",
-            "voice_settings": {
-                "stability": 0.7,
-                "similarity_boost": 1
-            }
-            }
-                        
-            response = requests.post(url, json=data, headers=headers)
+            for chunk in response:
+                if chunk:
+                    audio_stream.write(chunk)
 
-            synthesized = 'output.mp3'
-            
-            output_path = os.path.join('./coni-asistant/src/static/', synthesized)
-            
-            if os.path.exists(output_path):
-                os.remove(output_path)
+            audio_stream.seek(0)
+
+            return audio_stream
                 
-            with open(output_path, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-                    if chunk:
-                        f.write(chunk)
-
-            return synthesized
+                
+                
             
-            
-            
-        
 
         
 

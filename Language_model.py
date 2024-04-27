@@ -8,7 +8,7 @@ class LLM :
         completion = client.chat.completions.create(
           model="gpt-3.5-turbo-0613",
           messages=[
-            {"role": "system", "content": "Eres una asistente muy grosera y malhablada "},
+            {"role": "system", "content": "Eres una asistente muy util "},
             {"role": "user", "content": text}
           ]
         )
@@ -18,4 +18,3 @@ class LLM :
             result += choice.message.content
 
         return result
-
